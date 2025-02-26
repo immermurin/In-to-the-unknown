@@ -1,5 +1,6 @@
 package Inotia;
 
-public class GamePanel {
+public class GamePanel 
+{
     
 }
