@@ -1,4 +1,4 @@
-package simple.game;
+package Inotia;
 
 import javax.swing.Timer;
 import java.awt.*;
@@ -21,15 +21,9 @@ public class BossFight extends javax.swing.JPanel implements KeyListener
     private final int playerSize = 128;
 
     // Character sprite animation
-    private BufferedImage[] walkUpFrames;
-    private BufferedImage[] walkDownFrames;
-    private BufferedImage[] walkLeftFrames;
-    private BufferedImage[] walkRightFrames;
+    private BufferedImage[] walkUpFrames, walkDownFrames, walkLeftFrames, walkRightFrames;
+    private BufferedImage[] idleUpFrames, idleDownFrames, idleLeftFrames, idleRightFrames;
     private BufferedImage[] currentFrames;
-    private BufferedImage[] idleUpFrames;
-    private BufferedImage[] idleDownFrames;
-    private BufferedImage[] idleLeftFrames;
-    private BufferedImage[] idleRightFrames;
 
     private int frameIndex = 0;
     private Timer animationTimer;
@@ -70,24 +64,21 @@ public class BossFight extends javax.swing.JPanel implements KeyListener
         animationTimer.start();
     }
     
-    private void loadCharacterSprites() 
-    {
-        try 
-        {
-            walkUpFrames = loadSpriteFrames("/simple/game/Characters/Female/Walk/walk_Up.png");
-            walkDownFrames = loadSpriteFrames("/simple/game/Characters/Female/Walk/walk_Down.png");
-            walkLeftFrames = loadSpriteFrames("/simple/game/Characters/Female/Walk/walk_Left_Down.png");
-            walkRightFrames = loadSpriteFrames("/simple/game/Characters/Female/Walk/walk_Right_Down.png");
+    private void loadCharacterSprites() {
+        try {
+            walkUpFrames = loadSpriteFrames("/Inotia/Characters/Female/Walk/walk_Up.png");
+            walkDownFrames = loadSpriteFrames("/Inotia/Characters/Female/Walk/walk_Down.png");
+            walkLeftFrames = loadSpriteFrames("/Inotia/Characters/Female/Walk/walk_Left_Down.png");
+            walkRightFrames = loadSpriteFrames("/Inotia/Characters/Female/Walk/walk_Right_Down.png");
             
-            idleUpFrames = loadSpriteFrames("/simple/game/Characters/Female/Idle/Idle_Up.png");
-            idleDownFrames = loadSpriteFrames("/simple/game/Characters/Female/Idle/Idle_Down.png");
-            idleLeftFrames = loadSpriteFrames("/simple/game/Characters/Female/Idle/Idle_Left_Down.png");
-            idleRightFrames = loadSpriteFrames("/simple/game/Characters/Female/Idle/Idle_Right_Down.png");
+            idleUpFrames = loadSpriteFrames("/Inotia/Characters/Female/Idle/Idle_Up.png");
+            idleDownFrames = loadSpriteFrames("/Inotia/Characters/Female/Idle/Idle_Down.png");
+            idleLeftFrames = loadSpriteFrames("/Inotia/Characters/Female/Idle/Idle_Left_Down.png");
+            idleRightFrames = loadSpriteFrames("/Inotia/Characters/Female/Idle/Idle_Right_Down.png");
 
-            currentFrames = walkDownFrames; // Default animation
-
+            currentFrames = walkDownFrames;
             System.out.println("All sprite animations loaded successfully!");
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Error loading character sprites: " + e.getMessage());
             e.printStackTrace();
         }
