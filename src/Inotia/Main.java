@@ -8,7 +8,7 @@ public class Main {
         // Create the game window
         JFrame window = new JFrame("Inotia");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setExtendedState(JFrame.MAXIMIZED_BOTH); // 🔹 Fullscreen
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH); // Fullscreen
         window.setUndecorated(true);
 
         // Screen Manager to switch between screens
