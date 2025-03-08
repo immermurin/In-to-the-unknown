@@ -3,27 +3,26 @@ package Inotia;
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuPanel extends JPanel {
+public class MenuPanel extends JPanel 
+{
     private final ScreenManager screenManager;
-    private final ImageIcon backgroundGif;
 
     public MenuPanel(ScreenManager screenManager) 
     {
         this.screenManager = screenManager;
         setLayout(new GridBagLayout());
 
-        // Load animated background GIF
-        backgroundGif = new ImageIcon(getClass().getResource("/res/background.mp4"));
-
         // Create buttons
         JButton playButton = createButton("Play");
         JButton settingsButton = createButton("Settings");
         JButton aboutButton = createButton("About");
+        JButton exitButton = createButton("Exit"); // 🔹 New Exit Button
 
         // Add action listeners
         playButton.addActionListener(e -> screenManager.startGame());
         settingsButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Settings coming soon!"));
         aboutButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Developed by Inotia Team"));
+        exitButton.addActionListener(e -> System.exit(0)); // 🔹 Closes the game
 
         // Arrange buttons in a vertical layout
         GridBagConstraints gbc = new GridBagConstraints();
@@ -33,15 +32,13 @@ public class MenuPanel extends JPanel {
         gbc.gridy = 0; add(playButton, gbc);
         gbc.gridy = 1; add(settingsButton, gbc);
         gbc.gridy = 2; add(aboutButton, gbc);
+        gbc.gridy = 3; add(exitButton, gbc); // 🔹 Added Exit Button
     }
 
     @Override
-    protected void paintComponent(Graphics g) 
-    {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        // Draw animated background
-        g.drawImage(backgroundGif.getImage(), 0, 0, getWidth(), getHeight(), this);
+        g.drawImage(null, 0, 0, getWidth(), getHeight(), this); // Placeholder for background image
     }
 
     private JButton createButton(String text) {
