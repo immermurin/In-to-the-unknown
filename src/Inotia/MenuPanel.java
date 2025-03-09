@@ -16,13 +16,13 @@ public class MenuPanel extends JPanel
         JButton playButton = createButton("Play");
         JButton settingsButton = createButton("Settings");
         JButton aboutButton = createButton("About");
-        JButton exitButton = createButton("Exit"); // 🔹 New Exit Button
+        JButton exitButton = createButton("Exit"); // New Exit Button
 
         // Add action listeners
         playButton.addActionListener(e -> screenManager.startGame());
         settingsButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Settings coming soon!"));
         aboutButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Developed by Inotia Team"));
-        exitButton.addActionListener(e -> System.exit(0)); // 🔹 Closes the game
+        exitButton.addActionListener(e -> System.exit(0)); // Closes the game
 
         // Arrange buttons in a vertical layout
         GridBagConstraints gbc = new GridBagConstraints();
@@ -32,7 +32,7 @@ public class MenuPanel extends JPanel
         gbc.gridy = 0; add(playButton, gbc);
         gbc.gridy = 1; add(settingsButton, gbc);
         gbc.gridy = 2; add(aboutButton, gbc);
-        gbc.gridy = 3; add(exitButton, gbc); // 🔹 Added Exit Button
+        gbc.gridy = 3; add(exitButton, gbc); // Added Exit Button
     }
 
     @Override
