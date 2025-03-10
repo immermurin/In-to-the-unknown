@@ -10,35 +10,45 @@ public abstract class Player {
     protected int moveSpeed = 5;
 
     // Sprite handling
-    private BufferedImage spriteSheet;
-    private BufferedImage[][] animations; // 2D array [rows][columns]
+    private BufferedImage walkSpriteSheet;
+    private BufferedImage idleSpriteSheet;
+    private BufferedImage[][] walkAnimations; // Walking animations [rows][columns]
+    private BufferedImage[][] idleAnimations; // Idle animations [rows][columns]
+    
     private int currentFrame = 0;
     private int animationRow = 0; // Default: walking down
     private int frameDelay = 10; // Adjust for animation speed
     private int frameCounter = 0;
-    private int lastDirection = 0;
+    
+    private boolean isMoving = false;
+    private int lastDirection = 0; // Stores the last direction
 
-    public Player(String spritePath) {
+    public Player(String walkSpritePath, String idleSpritePath) {
         this.worldX = 0;
         this.worldY = 0;
-        loadSprites(spritePath);
+        loadSprites(walkSpritePath, idleSpritePath);
     }
 
-    private void loadSprites(String path) {
+    private void loadSprites(String walkPath, String idlePath) {
         try {
-            spriteSheet = ImageIO.read(getClass().getClassLoader().getResourceAsStream(path));
-            animations = new BufferedImage[8][6]; // 8 rows, 6 columns
+            walkSpriteSheet = ImageIO.read(getClass().getClassLoader().getResourceAsStream(walkPath));
+            idleSpriteSheet = ImageIO.read(getClass().getClassLoader().getResourceAsStream(idlePath));
+
+            walkAnimations = new BufferedImage[8][6]; // 8 rows, 6 columns
+            idleAnimations = new BufferedImage[8][6]; // 8 rows, 6 columns
 
             int spriteWidth = 48;
             int spriteHeight = 64;
-            int imageHeight = spriteSheet.getHeight(); // Ensure we don't go beyond bounds
+
+            int sheetHeight = walkSpriteSheet.getHeight(); // Ensure within image bounds
 
             for (int row = 0; row < 8; row++) {
-                for (int col = 0; col < 6; col++) {
-                    int y = row * spriteHeight;
-                    if (y + spriteHeight > imageHeight) continue; // Prevent out-of-bounds error
+                int y = row * spriteHeight;
+                if (y + spriteHeight > sheetHeight) break; // Prevent out-of-bounds error
 
-                    animations[row][col] = spriteSheet.getSubimage(col * spriteWidth, y, spriteWidth, spriteHeight);
+                for (int col = 0; col < 6; col++) {
+                    walkAnimations[row][col] = walkSpriteSheet.getSubimage(col * spriteWidth, y, spriteWidth, spriteHeight);
+                    idleAnimations[row][col] = idleSpriteSheet.getSubimage(col * spriteWidth, y, spriteWidth, spriteHeight);
                 }
             }
         } catch (IOException | NullPointerException e) {
@@ -48,54 +58,45 @@ public abstract class Player {
 
     public void move(int dx, int dy) {
         if (dx == 0 && dy == 0) {
-            animationRow = 0; // Idle animation
+            isMoving = false; // Stop walking
         } else {
-            if (dx > 0 && dy == 0) animationRow = 5; // Right
-            else if (dx < 0 && dy == 0) animationRow = 1; // Left
-            else if (dx == 0 && dy > 0) animationRow = 0; // Down
-            else if (dx == 0 && dy < 0) animationRow = 3; // Up
-            else if (dx > 0 && dy < 0) animationRow = 4; // Up-Right
-            else if (dx < 0 && dy < 0) animationRow = 2; // Up-Left
-            else if (dx > 0 && dy > 0) animationRow = 0; // Diagonal Down-Right
-            else if (dx < 0 && dy > 0) animationRow = 0; // Diagonal Down-Left
+            isMoving = true;
+            lastDirection = getDirection(dx, dy);
+            animationRow = lastDirection;
         }
 
-        if (dx != 0 && dy != 0) {
-            dx = (int) (dx / Math.sqrt(2)); // Normalize diagonal speed
-            dy = (int) (dy / Math.sqrt(2));
+        double length = Math.sqrt(dx * dx + dy * dy);
+        if (length != 0) {
+            dx = (int) Math.round((dx / length) * moveSpeed);
+            dy = (int) Math.round((dy / length) * moveSpeed);
         }
 
-        worldX += dx * moveSpeed;
-        worldY += dy * moveSpeed;
+        worldX += dx;
+        worldY += dy;
     }
 
-
-    private void selectAnimation(int dx, int dy) {
-        if (dx == 0 && dy > 0) animationRow = 0;  // Walking down
-        else if (dx < 0 && dy > 0) animationRow = 1; // Left-down
-        else if (dx < 0 && dy == 0) animationRow = 2; // Left
-        else if (dx < 0 && dy < 0) animationRow = 3; // Up-left
-        else if (dx == 0 && dy < 0) animationRow = 4; // Walking up
-        else if (dx > 0 && dy < 0) animationRow = 5; // Up-right
-        else if (dx > 0 && dy == 0) animationRow = 6; // Right
-        else if (dx > 0 && dy > 0) animationRow = 7; // Right-down
+    private int getDirection(int dx, int dy) {
+        if (dx > 0 && dy == 0) return 5; // Right
+        else if (dx < 0 && dy == 0) return 1; // Left
+        else if (dx == 0 && dy > 0) return 0; // Down
+        else if (dx == 0 && dy < 0) return 3; // Up
+        else if (dx > 0 && dy < 0) return 4; // Up-Right
+        else if (dx < 0 && dy < 0) return 2; // Up-Left
+        else if (dx > 0 && dy > 0) return 5; // Diagonal Down-Right (Don't change)
+        else return 1; // Diagonal Down-Left (Don't change)
     }
 
     public void updateAnimation() {
         frameCounter++;
         if (frameCounter >= frameDelay) {
-            currentFrame = (currentFrame + 1) % 6; // Loop through animation frames
+            currentFrame = (currentFrame + 1) % 6; // Loop animation frames
             frameCounter = 0;
         }
     }
 
     public void draw(Graphics g, int screenX, int screenY) {
-        if (animations[animationRow][currentFrame] != null) {
-            g.drawImage(animations[animationRow][currentFrame], screenX, screenY, null);
-        } else {
-            g.setColor(Color.RED);
-            g.fillRect(screenX, screenY, 48, 64); // Debugging - Shows a red box if null
-        }
+        BufferedImage[][] selectedAnimation = isMoving ? walkAnimations : idleAnimations;
+        g.drawImage(selectedAnimation[lastDirection][currentFrame], screenX, screenY, null);
     }
 
     public int getWorldX() {

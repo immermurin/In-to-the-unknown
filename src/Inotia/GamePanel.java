@@ -9,7 +9,7 @@ import java.util.*;
 public class GamePanel extends JPanel implements Runnable {
     private final int originalTileSize = 16;
     private final int scale = 4;
-    private final int tileSize = originalTileSize * scale;
+    public final int tileSize = originalTileSize * scale;
     private Player player; // Reference to the selected player
     private final Set<Integer> keys = new HashSet<>();
     private Thread gameThread;
