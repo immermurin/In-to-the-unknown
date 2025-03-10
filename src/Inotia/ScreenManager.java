@@ -45,8 +45,8 @@ public class ScreenManager {
             return;
         }
 
-        gamePanel = new GamePanel(800, 600);
-        gamePanel.setPlayer(selectedPlayer); // ✅ Pass the selected player
+        gamePanel = new GamePanel(800, 600,this);
+        gamePanel.setPlayer(selectedPlayer); // Pass the selected player
         window.setContentPane(gamePanel);
         window.revalidate();
         gamePanel.requestFocusInWindow();
