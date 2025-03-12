@@ -12,10 +12,13 @@ public class ScreenManager {
     private MenuPanel menuPanel;
     private PlayerSelectionPanel playerSelectionPanel;
     private Player selectedPlayer;
+    private SoundManager soundManager;
 
     public ScreenManager(JFrame window) {
         this.window = window;
+        this.soundManager = new SoundManager();
         showMenu();
+        soundManager.playBackgroundMusic("/res/bgm.wav");
     }
 
     public void showMenu() {

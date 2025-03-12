@@ -2,11 +2,14 @@ package Inotia;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import javax.sound.sampled.*;
 
 public class MenuPanel extends JPanel {
     private final ScreenManager screenManager;
 
-    public MenuPanel(ScreenManager screenManager) {
+    public MenuPanel(ScreenManager screenManager) 
+    {
         this.screenManager = screenManager;
         setLayout(new GridBagLayout());
 
@@ -30,7 +33,8 @@ public class MenuPanel extends JPanel {
         gbc.gridy = 3; add(exitButton, gbc);
     }
 
-    private JButton createButton(String text) {
+    private JButton createButton(String text) 
+    {
         JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(200, 50));
         button.setFont(new Font("Arial", Font.BOLD, 20));
