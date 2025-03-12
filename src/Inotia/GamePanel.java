@@ -6,10 +6,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+
 public class GamePanel extends JPanel implements Runnable {
     private final int originalTileSize = 16;
     private final int scale = 4;
     public final int tileSize = originalTileSize * scale;
+    private PlayerHUD playerHUD;
     private Player player; // Reference to the selected player
     private final Set<Integer> keys = new HashSet<>();
     private Thread gameThread;
@@ -31,8 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setPlayer(Player player) {
-        
         this.player = player;
+        this.playerHUD = new PlayerHUD(player); // Initialize HUD after setting player
         System.out.println("Player set: " + player.getClass().getSimpleName()); // Debug log
     }
 
@@ -73,6 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.move(dx, dy); // Move the player
         dragon.update(player.getWorldX(), player.getWorldY());
         player.updateAnimation();
+        dragon.updateAnimation();
         
         // Pause game when ESC is pressed
         if (keys.contains(KeyEvent.VK_ESCAPE)) 
@@ -98,7 +101,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Display World Coordinates on the upper left
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 16));
-        g.drawString("World Position: " + player.getWorldX() + ", " + player.getWorldY(), 10, 20);
+        g.drawString("World Position: " + player.getWorldX() + ", " + player.getWorldY(), 30, 90);
         
         // Draw Pause Overlay
         if (isPaused) {
@@ -108,6 +111,8 @@ public class GamePanel extends JPanel implements Runnable {
             g.setFont(new Font("Arial", Font.BOLD, 30));
             g.drawString("Game Paused", getWidth() / 2 - 100, getHeight() / 2 - 100);
         }
+        
+        playerHUD.draw(g);
     }
     
     private void togglePause() {

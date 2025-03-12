@@ -31,6 +31,11 @@ public class ScreenManager {
         window.revalidate();
         window.repaint();
     }
+    
+    public Player getCurrentPlayer() 
+    {
+        return selectedPlayer;
+    }
 
     public void startGame(String playerName) 
     {
