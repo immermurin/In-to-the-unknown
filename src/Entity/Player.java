@@ -45,18 +45,31 @@ public abstract class Player {
             for (int row = 0; row < 8; row++) {
                 int y = row * spriteHeight;
                 if (y + spriteHeight > sheetHeight) break; // Prevent out-of-bounds error
-
-                for (int col = 0; col < 6; col++) {
-                    walkAnimations[row][col] = walkSpriteSheet.getSubimage(col * spriteWidth, y, spriteWidth, spriteHeight);
-                    idleAnimations[row][col] = idleSpriteSheet.getSubimage(col * spriteWidth, y, spriteWidth, spriteHeight);
+                for (int col = 0; col < 6; col++) 
+                {
+                    walkAnimations[row][col] = resizeSprite(walkSpriteSheet.getSubimage(col * spriteWidth, y, spriteWidth, spriteHeight),96,128);
+                    idleAnimations[row][col] = resizeSprite(idleSpriteSheet.getSubimage(col * spriteWidth, y, spriteWidth, spriteHeight),96, 128);
                 }
             }
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
     }
+    
+    private BufferedImage resizeSprite(BufferedImage image, int newWidth, int newHeight) 
+    {
+        Image temp = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
 
-    public void move(int dx, int dy) {
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.drawImage(temp, 0, 0, null);
+        g2d.dispose();
+
+        return resizedImage;
+    }
+
+    public void move(int dx, int dy) 
+    {
         if (dx == 0 && dy == 0) {
             isMoving = false; // Stop walking
         } else {
@@ -86,13 +99,16 @@ public abstract class Player {
         else return 1; // Diagonal Down-Left (Don't change)
     }
 
-    public void updateAnimation() {
+    public void updateAnimation() 
+    {
         frameCounter++;
-        if (frameCounter >= frameDelay) {
+        if (frameCounter >= frameDelay) 
+        {
             currentFrame = (currentFrame + 1) % 6; // Loop animation frames
             frameCounter = 0;
         }
     }
+    
 
     public void draw(Graphics g, int screenX, int screenY) {
         BufferedImage[][] selectedAnimation = isMoving ? walkAnimations : idleAnimations;
