@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public abstract class Player {
     protected int worldX, worldY;
-    protected int moveSpeed = 5;
+    protected int moveSpeed = 4;
 
     // Sprite handling
     private BufferedImage walkSpriteSheet;

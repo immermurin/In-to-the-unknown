@@ -13,7 +13,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player; // Reference to the selected player
     private final Set<Integer> keys = new HashSet<>();
     private Thread gameThread;
-    private final int moveSpeed = 2;
+    private final int moveSpeed = 4;
     private Dragon dragon;
     private boolean isPaused = false;
     private ScreenManager screenManager;

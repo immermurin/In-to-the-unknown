@@ -2,7 +2,8 @@ package Inotia;
 
 import javax.swing.*;
 
-public class Main {
+public class Main 
+{
     public static void main(String[] args) 
     {
         // Create the game window
