@@ -7,11 +7,14 @@ import javax.sound.sampled.*;
 
 public class MenuPanel extends JPanel {
     private final ScreenManager screenManager;
+    private SoundManager soundManager;
 
     public MenuPanel(ScreenManager screenManager) 
     {
         this.screenManager = screenManager;
         setLayout(new GridBagLayout());
+        this.soundManager = new SoundManager();
+        soundManager.playBackgroundMusic("/res/bgm.wav");
 
         JButton playButton = createButton("Play");
         JButton settingsButton = createButton("Settings");
